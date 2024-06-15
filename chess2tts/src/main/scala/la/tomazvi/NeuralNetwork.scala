@@ -24,4 +24,8 @@ object NeuralNetwork {
     val ones = DenseMatrix.ones[Double](y.rows, y.cols)
     dY *:* y *:* (ones - y)
   }
+
+  def linearGradient(x: DenseMatrix[Double], dY: DenseMatrix[Double]): DenseMatrix[Double] = {
+    (x.t * dY).map(_ / x.rows)
+  }
 }

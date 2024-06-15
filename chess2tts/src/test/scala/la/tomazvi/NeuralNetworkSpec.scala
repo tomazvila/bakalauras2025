@@ -64,4 +64,21 @@ class NeuralNetworkSpec extends AnyFlatSpec with should.Matchers {
 
     res shouldBe expected
   }
+
+  it should "calculate linear gradient" in {
+    val test = DenseMatrix(
+      (1.0, 1.0),
+      (1.0, 1.0)
+    )
+
+    val res = NeuralNetwork.linearGradient(m, test)
+    val expected = DenseMatrix(
+      (2.5, 2.5),
+      (3.5, 3.5),
+    )
+
+    res shouldBe expected
+  }
+
+
 }
