@@ -49,4 +49,19 @@ class NeuralNetworkSpec extends AnyFlatSpec with should.Matchers {
 
     res shouldBe expected
   }
+
+  it should "calculate sigmoid gradient" in {
+    val test = DenseMatrix(
+      (1.0, 1.0),
+      (1.0, 1.0)
+    )
+
+    val res = NeuralNetwork.sigmoidGradient(m, test)
+    val expected = DenseMatrix(
+      (0.19661193324148185, 0.10499358540350662),
+      (0.017662706213291107, 0.006648056670790033)
+    )
+
+    res shouldBe expected
+  }
 }

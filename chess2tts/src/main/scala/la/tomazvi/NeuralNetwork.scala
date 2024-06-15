@@ -18,4 +18,10 @@ object NeuralNetwork {
     val diff = y - tgt
     diff.map(_ * 2)
   }
+
+  def sigmoidGradient(x: DenseMatrix[Double], dY: DenseMatrix[Double]): DenseMatrix[Double] = {
+    val y = sigmoid(x)
+    val ones = DenseMatrix.ones[Double](y.rows, y.cols)
+    dY *:* y *:* (ones - y)
+  }
 }
