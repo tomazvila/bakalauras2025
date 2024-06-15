@@ -6,11 +6,14 @@ import org.apache.pekko.actor.typed.Behavior
 import org.apache.pekko.actor.typed.scaladsl.Behaviors
 import org.apache.pekko.actor.Timers
 import breeze.linalg._
+import breeze.numerics._
 import la.tomazvi.IrisReaderActor._
 import la.tomazvi.IrisNNActor._
-import scala.io.Source
+import scala.io.{ Source => IOSource }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
+import scala.collection.Iterator.iterate
+import org.apache.pekko.stream.scaladsl.Source
 
 object IrisReaderActor {
   sealed trait Command
@@ -36,14 +39,14 @@ object IrisReaderActor {
   }
 
   private def readData(fileName: String): List[String] = {
-    val source = Source.fromResource(fileName)
+    val source = IOSource.fromResource(fileName)
     try {
       source.getLines.toList
     } finally {
       source.close()
     }
   }
-
+  
   private def parseIrisX(lines: List[String]): DenseMatrix[Double] = {
     DenseMatrix(lines.map(_.split(" ").map(_.toDouble)): _*)
   }
@@ -55,7 +58,8 @@ object IrisReaderActor {
 
 object IrisNNActor {
   sealed trait Command
-  final object Train extends Command
+  object Train extends Command
+  private object GenerateRandomMatrix extends Command
 
   private final case class IrisXDataAdapter(response: IrisReaderActor.IrisXData) extends Command
   private final case class IrisYDataAdapter(response: IrisReaderActor.IrisYData) extends Command
@@ -86,14 +90,14 @@ object IrisNNActor {
     case IrisXDataAdapter(IrisXData(dta)) =>
       val updated = datacontainer.copy(dta = Some(dta))
       if (updated.hasBoth) {
-        train(updated)
+        Behaviors.stopped
       } else {
         readData(updated)
       }
     case IrisYDataAdapter(IrisYData(tgt)) =>
       val updated = datacontainer.copy(tgt = Some(tgt))
       if (updated.hasBoth) {
-        train(updated)
+        Behaviors.stopped
       } else {
         readData(updated)
       }

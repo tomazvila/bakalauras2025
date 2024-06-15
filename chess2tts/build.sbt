@@ -14,6 +14,7 @@ fork := true
 
 libraryDependencies ++= Seq(
   "org.apache.pekko" %% "pekko-actor-typed" % pekkoVersion,
+  "org.apache.pekko" %% "pekko-stream" % pekkoVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.13",
   "org.apache.pekko" %% "pekko-actor-testkit-typed" % pekkoVersion % Test,
   "org.scalatest" %% "scalatest" % "3.2.18" % Test,
