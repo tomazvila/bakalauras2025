@@ -28,4 +28,14 @@ object NeuralNetwork {
   def linearGradient(x: DenseMatrix[Double], dY: DenseMatrix[Double]): DenseMatrix[Double] = {
     (x.t * dY).map(_ / x.rows)
   }
+
+  def gradient(x: DenseMatrix[Double], y: DenseMatrix[Double])(
+    w1: DenseMatrix[Double]
+  ): DenseMatrix[Double] = {
+    val (h, y_pred) = forward(x, w1) 
+    val dE = linearGradient(y_pred, y)
+    val dY = sigmoidGradient(h, dE)
+    val dW1 = linearGradient(x, dY)
+    dW1
+  }
 }
