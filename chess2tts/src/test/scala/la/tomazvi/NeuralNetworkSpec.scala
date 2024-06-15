@@ -23,8 +23,9 @@ class NeuralNetworkSpec extends AnyFlatSpec with should.Matchers {
    * AB: m x p => Wx: 2 x 1
    */
 
+  val m = DenseMatrix((1.0, 2.0), (4.0, 5.0))
+
   it should "move ones matrix forward" in {
-    val m = DenseMatrix((1.0, 2.0), (4.0, 5.0))
     val (_ ,y)  = NeuralNetwork.forward(m, m)
     val expected = DenseMatrix(
       (0.9998766054240137, 0.9999938558253978), 
@@ -32,5 +33,20 @@ class NeuralNetworkSpec extends AnyFlatSpec with should.Matchers {
     )
 
     y shouldBe expected
+  }
+
+  it should "calculate loss gradient" in {
+    val test = DenseMatrix(
+      (1.0, 1.0),
+      (1.0, 1.0)
+    )
+
+    val res = NeuralNetwork.lossGradient(m, test)
+    val expected = DenseMatrix(
+      (0.0, 2.0),
+      (6.0, 8.0)
+    )
+
+    res shouldBe expected
   }
 }

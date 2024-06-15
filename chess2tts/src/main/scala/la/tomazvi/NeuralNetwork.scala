@@ -13,4 +13,9 @@ object NeuralNetwork {
     val y = sigmoid(h)
     (h, y)
   }
+
+  def lossGradient(y: DenseMatrix[Double], tgt: DenseMatrix[Double]): DenseMatrix[Double] = {
+    val diff = y - tgt
+    diff.map(_ * 2)
+  }
 }
